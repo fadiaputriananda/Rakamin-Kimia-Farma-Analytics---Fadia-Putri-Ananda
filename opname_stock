@@ -1,0 +1,23 @@
+create table `rakamin-kf-analytics-460713.kimia_farma.opname_stock`as 
+(
+  select
+  ta.transaction_id, 
+  ta.date,
+  ta.branch_name,
+  ta.kota,
+  ta.provinsi,
+  ta.rating_cabang,
+  ta.rating_transaksi,
+  ta.branch_id,
+  ta.product_id,
+  ta.product_name,
+  ta.actual_price,
+  ta.discount_percentage,
+  ta.persentase_gross_laba,
+  ta.nett_sales,
+  ta.nett_profit,
+  iv.opname_stock
+
+from `rakamin-kf-analytics-460713.kimia_farma.kf_tabel_analisa` as ta
+join `rakamin-kf-analytics-460713.kimia_farma.kf_inventory` as iv
+on ta.branch_id = iv.branch_id) LIMIT 672458
