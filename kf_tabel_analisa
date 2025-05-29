@@ -1,0 +1,48 @@
+-- RAKAMIN PROJECT BASED INTERNSHIP --
+-- BIG DATA ANALYTICS KIMIA FARMA --
+-- FADIA PUTRI ANANDA --
+
+
+-- CREATE TABLE --
+CREATE TABLE `rakamin-kf-analytics-460713.kimia_farma.kf_tabel_analisa`     -- Use CREATE TABLE to make a new table in Dataset --
+AS 
+(
+WITH TEMP             -- Use CTE to able to use a data/colomn in a new table directly --
+AS (
+SELECT 
+ft.transaction_id,    -- Write down the data needed for the new table using alias (AS) to make easier write the tables refers to --
+ft.date,
+ft.branch_id,
+kc.branch_name,
+kc.kota,
+kc.provinsi,
+kc.rating AS rating_cabang,
+ft.customer_name,
+ft.product_id,
+p.product_name,
+ft.price AS actual_price,
+ft.discount_percentage,
+
+CASE                   -- Use CASE WHEN to categorize data based on conditional situations --
+WHEN ft.price <= 50000 THEN 0.1
+WHEN ft.price BETWEEN 50000 AND 100000 THEN 0.15
+WHEN ft.price BETWEEN 100000 AND 300000 THEN 0.2
+WHEN ft.price BETWEEN 300000 AND 500000 THEN 0.25
+WHEN ft.price > 500000 THEN 0.3
+END AS persentase_gross_laba,
+
+CAST(ROUND(ft.price - (ft.price*ft.discount_percentage)) AS INT64) AS nett_sales,     -- Use CAST ROUND to change the type of data into Integer --
+ft.rating AS rating_transaksi
+
+FROM `rakamin-kf-analytics-460713.kimia_farma.kf_final_transaction` AS ft
+JOIN `rakamin-kf-analytics-460713.kimia_farma.kf_kantor_cabang` AS kc
+ON ft.branch_id = kc.branch_id
+JOIN `rakamin-kf-analytics-460713.kimia_farma.kf_product` AS p
+ON ft.product_id = p.product_id
+)
+SELECT
+TEMP.*,
+CAST(ROUND(nett_sales * persentase_gross_laba)AS INT64) AS nett_profit,
+FROM TEMP
+
+ORDER BY date ASC);    -- Use ORDER BY and ASC to sorting data based on certain data in ascending --
