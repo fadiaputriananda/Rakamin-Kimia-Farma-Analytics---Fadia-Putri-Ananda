@@ -20,4 +20,4 @@ create table `rakamin-kf-analytics-460713.kimia_farma.opname_stock`as
 
 from `rakamin-kf-analytics-460713.kimia_farma.kf_tabel_analisa` as ta
 join `rakamin-kf-analytics-460713.kimia_farma.kf_inventory` as iv
-on ta.branch_id = iv.branch_id) LIMIT 672458
+on ta.branch_id = iv.branch_id) LIMIT 672458         -- Limit same as a total rows of transaction_id --
